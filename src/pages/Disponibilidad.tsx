@@ -119,7 +119,7 @@ export function Disponibilidad() {
   };
 
   return (
-    <div className="min-h-screen pb-32 bg-[hsl(265,50%,4%)]">
+    <div className="min-h-screen bg-[hsl(265,50%,4%)]">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

@@ -84,9 +84,9 @@ export function Home({ onNavigate }: HomeProps) {
   ];
 
   return (
-    <div className="min-h-screen pb-32 bg-[hsl(265,50%,4%)] overflow-hidden">
+    <div className="min-h-screen bg-[hsl(265,50%,4%)] overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen">
+      <section className="relative min-h-screen w-screen left-1/2 -translate-x-1/2">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img
@@ -178,7 +178,7 @@ export function Home({ onNavigate }: HomeProps) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                Hacemos realidad tu
+              
               </motion.p>
 
               {/* Main Title */}
@@ -187,14 +187,14 @@ export function Home({ onNavigate }: HomeProps) {
                   'block text-6xl sm:text-8xl font-black tracking-tighter text-white',
                   'leading-[0.9]'
                 )}>
-                  FIESTA DE
+                  MONA
                 </span>
                 <span className={cn(
                   'block text-6xl sm:text-8xl font-black tracking-tighter',
                   'bg-gradient-to-r from-violet-400 via-amber-300 to-violet-400',
                   'bg-clip-text text-transparent leading-[0.9] mt-1'
                 )}>
-                  15 AÑOS
+                  EVENTOS
                 </span>
                 {/* Decorative line */}
                 <motion.div 
@@ -273,7 +273,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Services Section */}
-      <section className="px-6 py-20 relative">
+      <section className="px-6 py-20 relative w-[60%] mx-auto">
         {/* Background decoration */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
@@ -340,7 +340,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="px-6 py-16">
+      <section className="px-6 py-16 w-[60%] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -401,7 +401,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Final CTA Section */}
-      <section className="px-6 py-16">
+      <section className="px-6 py-16 w-[60%] mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -452,28 +452,6 @@ export function Home({ onNavigate }: HomeProps) {
         </motion.div>
       </section>
 
-      {/* Footer Info */}
-      <section className="px-6 py-8 pb-32">
-        <div className="text-center">
-          <motion.div 
-            className="flex items-center justify-center gap-2 mb-3"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="p-2 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500">
-              <Crown className="w-5 h-5 text-violet-950" />
-            </div>
-            <span className="font-bold text-xl text-white">
-              Mona Eventos
-            </span>
-          </motion.div>
-          <p className="text-slate-400 text-sm">
-            Especialistas en fiestas de 15 años
-          </p>
-          <p className="text-xs text-slate-500 mt-2">
-            Creando recuerdos inolvidables desde 2015
-          </p>
-        </div>
-      </section>
     </div>
   );
 }

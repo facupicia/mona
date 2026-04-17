@@ -120,7 +120,7 @@ export function Galeria() {
 
   return (
     <div 
-      className="min-h-screen pb-32 bg-[hsl(265,50%,4%)]"
+      className="min-h-screen bg-[hsl(265,50%,4%)]"
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >

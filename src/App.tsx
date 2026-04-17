@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { BottomNav } from '@/components/common/BottomNav';
 import { WhatsAppButton } from '@/components/common/WhatsAppButton';
+import { Footer } from '@/components/common/Footer';
 import { Home } from '@/pages/Home';
 import { Disponibilidad } from '@/pages/Disponibilidad';
 import { Galeria } from '@/pages/Galeria';
@@ -71,7 +72,7 @@ function AppContent() {
       />
 
       {/* Main content */}
-      <main className="relative">
+      <main className="relative mx-auto">
         <AnimatePresence mode="wait" custom={direction}>
           {currentPage === 'home' && (
             <motion.div
@@ -116,6 +117,9 @@ function AppContent() {
 
       {/* WhatsApp Float Button */}
       <WhatsAppButton />
+
+      {/* Footer - Global */}
+      <Footer onNavigate={handleNavigate} />
 
       {/* Bottom Navigation */}
       <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />
