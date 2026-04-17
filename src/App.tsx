@@ -1,63 +1,112 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { SeasonProvider } from '@/context/SeasonContext';
-import { SeasonWrapper } from '@/components/common/SeasonWrapper';
+import { ThemeProvider } from '@/context/ThemeContext';
 import { BottomNav } from '@/components/common/BottomNav';
-import { SeasonToggle } from '@/components/common/SeasonToggle';
+import { WhatsAppButton } from '@/components/common/WhatsAppButton';
 import { Home } from '@/pages/Home';
-import { Eventos } from '@/pages/Eventos';
+import { Disponibilidad } from '@/pages/Disponibilidad';
 import { Galeria } from '@/pages/Galeria';
 import './App.css';
 
-type Page = 'home' | 'eventos' | 'galeria';
+type Page = 'home' | 'disponibilidad' | 'galeria';
+
+// Transiciones suaves y elegantes entre páginas
+const pageVariants = {
+  initial: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? 50 : -50,
+    scale: 0.98,
+  }),
+  animate: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+  exit: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? -50 : 50,
+    scale: 0.98,
+    transition: {
+      duration: 0.3,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
+// Mapeo de páginas para determinar dirección
+const pageOrder: Page[] = ['home', 'disponibilidad', 'galeria'];
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [direction, setDirection] = useState(0);
 
   const handleNavigate = (page: Page) => {
+    const currentIndex = pageOrder.indexOf(currentPage);
+    const newIndex = pageOrder.indexOf(page);
+    setDirection(newIndex > currentIndex ? 1 : -1);
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <SeasonWrapper>
+    <div className="relative min-h-screen bg-[hsl(265,50%,4%)] overflow-x-hidden">
+      {/* Background gradient mesh */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-950/20 via-transparent to-purple-950/20" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl" />
+      </div>
+
+      {/* Decorative grid pattern */}
+      <div 
+        className="fixed inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(139, 92, 246, 0.15) 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }}
+      />
+
+      {/* Main content */}
       <main className="relative">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           {currentPage === 'home' && (
             <motion.div
               key="home"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.2 }}
+              custom={direction}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
-              <Home 
-                onOpenEventModal={() => setIsEventModalOpen(true)} 
-                onNavigate={handleNavigate}
-              />
+              <Home onNavigate={handleNavigate} />
             </motion.div>
           )}
           
-          {currentPage === 'eventos' && (
+          {currentPage === 'disponibilidad' && (
             <motion.div
-              key="eventos"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              key="disponibilidad"
+              custom={direction}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
-              <Eventos />
+              <Disponibilidad />
             </motion.div>
           )}
           
           {currentPage === 'galeria' && (
             <motion.div
               key="galeria"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
+              custom={direction}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
             >
               <Galeria />
             </motion.div>
@@ -65,30 +114,20 @@ function AppContent() {
         </AnimatePresence>
       </main>
 
-      {/* Season Toggle FAB */}
-      <SeasonToggle />
+      {/* WhatsApp Float Button */}
+      <WhatsAppButton />
 
       {/* Bottom Navigation */}
       <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />
-
-      {/* Event Modal (from home CTA) */}
-      <AnimatePresence>
-        {isEventModalOpen && (
-          <Eventos 
-            isModalOpen={isEventModalOpen} 
-            onCloseModal={() => setIsEventModalOpen(false)} 
-          />
-        )}
-      </AnimatePresence>
-    </SeasonWrapper>
+    </div>
   );
 }
 
 function App() {
   return (
-    <SeasonProvider>
+    <ThemeProvider>
       <AppContent />
-    </SeasonProvider>
+    </ThemeProvider>
   );
 }
 

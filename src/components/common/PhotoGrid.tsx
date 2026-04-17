@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useSeason } from '@/context/SeasonContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Photo } from '@/types';
-import { StoriesView } from './StoriesView';
 
 interface PhotoGridProps {
   photos: Photo[];
 }
 
 export function PhotoGrid({ photos }: PhotoGridProps) {
-  const { theme } = useSeason();
+  const { theme } = useTheme();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // Agrupar fotos por fecha
@@ -24,6 +24,22 @@ export function PhotoGrid({ photos }: PhotoGridProps) {
   const sortedDates = Object.keys(groupedPhotos).sort((a, b) => 
     new Date(b).getTime() - new Date(a).getTime()
   );
+
+  const handleClose = () => setSelectedIndex(null);
+  
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedIndex !== null) {
+      setSelectedIndex(selectedIndex === 0 ? photos.length - 1 : selectedIndex - 1);
+    }
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedIndex !== null) {
+      setSelectedIndex(selectedIndex === photos.length - 1 ? 0 : selectedIndex + 1);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -41,14 +57,11 @@ export function PhotoGrid({ photos }: PhotoGridProps) {
             <div className="flex items-center gap-2 px-1">
               <span className={cn(
                 'text-xs font-medium px-3 py-1 rounded-full',
-                theme.card,
-                theme.border,
-                'border',
-                theme.textMuted
+                'bg-slate-900/50 border border-slate-800 text-slate-400'
               )}>
                 {formattedDate}
               </span>
-              <span className={cn('text-xs', theme.textMuted)}>
+              <span className={cn('text-xs text-slate-500')}>
                 {datePhotos.length} fotos
               </span>
             </div>
@@ -99,13 +112,64 @@ export function PhotoGrid({ photos }: PhotoGridProps) {
         );
       })}
 
-      {/* Stories view modal */}
-      <StoriesView
-        photos={photos}
-        initialIndex={selectedIndex || 0}
-        isOpen={selectedIndex !== null}
-        onClose={() => setSelectedIndex(null)}
-      />
+      {/* Lightbox */}
+      <AnimatePresence>
+        {selectedIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleClose}
+            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center"
+          >
+            {/* Close button */}
+            <button
+              onClick={handleClose}
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Navigation */}
+            {photos.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrev}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            {/* Image */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="max-w-4xl max-h-[80vh] mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={photos[selectedIndex].url}
+                alt="Foto"
+                className="max-w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            </motion.div>
+
+            {/* Counter */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/60 text-sm">
+              {selectedIndex + 1} / {photos.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
