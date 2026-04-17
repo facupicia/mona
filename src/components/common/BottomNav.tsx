@@ -57,7 +57,8 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
           'flex items-center justify-around p-2 rounded-3xl',
           'bg-white/[0.03] ',
           'border border-white/[0.08]',
-          'shadow-2xl shadow-black/40'
+          'shadow-2xl shadow-black/40',
+          'backdrop-blur-md'
         )}>
           {navItems.map((item) => {
             const Icon = item.icon;
