@@ -71,7 +71,7 @@ function AppContent() {
       />
 
       {/* Main content */}
-      <main className="relative mx-auto">
+      <main className="relative mx-auto max-w-full overflow-x-hidden">
         <AnimatePresence mode="wait" custom={direction}>
           {currentPage === 'home' && (
             <motion.div

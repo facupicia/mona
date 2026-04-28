@@ -74,7 +74,7 @@ export function Home({ onNavigate }: HomeProps) {
   return (
     <div className="min-h-screen bg-[hsl(265,50%,4%)] overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen w-screen left-1/2 -translate-x-1/2">
+      <section className="relative min-h-[100dvh] w-full overflow-hidden">
         {/* Background with Overlay */}
         <div className="absolute inset-0 bg-[hsl(265,50%,8%)]">
           <div className={cn(
@@ -111,7 +111,7 @@ export function Home({ onNavigate }: HomeProps) {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 h-screen flex flex-col justify-between px-6 py-8">
+        <div className="relative z-10 min-h-[100dvh] flex flex-col justify-between px-4 sm:px-6 py-6 sm:py-8">
           {/* Top Badge */}
           <motion.div 
             className="pt-safe flex justify-center"
@@ -120,20 +120,20 @@ export function Home({ onNavigate }: HomeProps) {
             transition={{ delay: 0.3, duration: 0.5 }}
           >
             <div className={cn(
-              'px-5 py-2.5 rounded-full',
+              'px-4 sm:px-5 py-2 sm:py-2.5 rounded-full',
               'bg-gradient-to-r from-violet-500/20 to-purple-500/20',
               'backdrop-blur-md border border-violet-400/30',
               'flex items-center gap-2'
             )}>
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="text-violet-200 text-sm font-medium tracking-wide">
+              <span className="text-violet-200 text-xs sm:text-sm font-medium tracking-wide">
                 Especialistas en fiestas de 15
               </span>
             </div>
           </motion.div>
 
           {/* Main Content */}
-          <div className="flex-1 flex flex-col justify-center items-center text-center -mt-8">
+          <div className="flex-1 flex flex-col justify-center items-center text-center -mt-4 sm:-mt-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -144,10 +144,10 @@ export function Home({ onNavigate }: HomeProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="mb-6"
+                className="mb-4 sm:mb-6"
               >
                 <div className="relative inline-block">
-                  <Crown className="w-16 h-16 text-amber-400 mx-auto" />
+                  <Crown className="w-12 h-12 sm:w-16 sm:h-16 text-amber-400 mx-auto" />
                   <motion.div
                     className="absolute inset-0 blur-xl bg-amber-400/40 rounded-full"
                     animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -158,24 +158,24 @@ export function Home({ onNavigate }: HomeProps) {
               
               {/* Subtitle */}
               <motion.p 
-                className="text-violet-300 text-lg mb-3 font-medium tracking-wider uppercase"
+                className="text-violet-300 text-sm sm:text-lg mb-2 sm:mb-3 font-medium tracking-wider uppercase"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-              
+                Fiesta de 15 años
               </motion.p>
 
               {/* Main Title */}
               <h1 className="relative">
                 <span className={cn(
-                  'block text-6xl sm:text-8xl font-black tracking-tighter text-white',
+                  'block text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white',
                   'leading-[0.9]'
                 )}>
                   MONA
                 </span>
                 <span className={cn(
-                  'block text-6xl sm:text-8xl font-black tracking-tighter',
+                  'block text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter',
                   'bg-gradient-to-r from-violet-400 via-amber-300 to-violet-400',
                   'bg-clip-text text-transparent leading-[0.9] mt-1'
                 )}>
@@ -183,7 +183,7 @@ export function Home({ onNavigate }: HomeProps) {
                 </span>
                 {/* Decorative line */}
                 <motion.div 
-                  className="h-1 w-32 mx-auto mt-4 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent"
+                  className="h-1 w-24 sm:w-32 mx-auto mt-3 sm:mt-4 rounded-full bg-gradient-to-r from-transparent via-amber-400 to-transparent"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
@@ -193,8 +193,8 @@ export function Home({ onNavigate }: HomeProps) {
               {/* Description */}
               <motion.p 
                 className={cn(
-                  'mt-6 text-lg max-w-md mx-auto',
-                  'text-slate-300 leading-relaxed'
+                  'mt-4 sm:mt-6 text-base sm:text-lg max-w-xs sm:max-w-md mx-auto',
+                  'text-slate-300 leading-relaxed px-2'
                 )}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -211,7 +211,7 @@ export function Home({ onNavigate }: HomeProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.5 }}
-            className="space-y-3 max-w-md mx-auto w-full"
+            className="space-y-3 max-w-md mx-auto w-full pb-2"
           >
             {/* Primary CTA */}
             <motion.a
@@ -221,9 +221,9 @@ export function Home({ onNavigate }: HomeProps) {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               className={cn(
-                'w-full py-4 rounded-2xl',
-                'flex items-center justify-center gap-3',
-                'font-bold text-lg text-white',
+                'w-full py-3.5 sm:py-4 rounded-2xl',
+                'flex items-center justify-center gap-2 sm:gap-3',
+                'font-bold text-base sm:text-lg text-white',
                 'transition-all duration-300',
                 'bg-gradient-to-r from-violet-600 via-violet-500 to-purple-600',
                 'shadow-xl shadow-violet-500/30',
@@ -234,7 +234,7 @@ export function Home({ onNavigate }: HomeProps) {
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <MessageCircle className="w-5 h-5 relative z-10" />
               <span className="relative z-10">Consultanos por WhatsApp</span>
-              <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform hidden sm:inline-block" />
             </motion.a>
 
             {/* Secondary CTA */}
@@ -243,9 +243,9 @@ export function Home({ onNavigate }: HomeProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={cn(
-                'w-full py-4 rounded-2xl',
+                'w-full py-3.5 sm:py-4 rounded-2xl',
                 'flex items-center justify-center gap-2',
-                'font-medium text-white',
+                'font-medium text-white text-sm sm:text-base',
                 'transition-all duration-300',
                 'bg-white/10 backdrop-blur-md',
                 'border border-white/20',
@@ -260,7 +260,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Services Section */}
-      <section className="px-6 py-20 relative w-[60%] mx-auto">
+      <section className="px-4 sm:px-6 py-16 sm:py-20 relative max-w-7xl mx-auto">
         {/* Background decoration */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
@@ -272,22 +272,22 @@ export function Home({ onNavigate }: HomeProps) {
         >
           {/* Section Header */}
           <motion.div 
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
             variants={fadeInUp}
           >
-            <span className="text-amber-400 text-sm font-medium tracking-wider uppercase mb-2 block">
+            <span className="text-amber-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-2 block">
               Nuestros Servicios
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
               Todo para tu fiesta
             </h2>
-            <p className="text-slate-400 text-base max-w-md mx-auto">
+            <p className="text-slate-400 text-sm sm:text-base max-w-md mx-auto">
               Servicios premium para una noche inolvidable
             </p>
           </motion.div>
 
           {/* Services Grid */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {services.map((service) => {
               const Icon = service.icon;
               return (
@@ -297,7 +297,7 @@ export function Home({ onNavigate }: HomeProps) {
                   whileHover={{ y: -4, scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                   className={cn(
-                    'p-5 rounded-2xl text-center',
+                    'p-3 sm:p-5 rounded-2xl text-center',
                     'bg-gradient-to-br from-[hsl(265,35%,10%)] to-[hsl(265,30%,8%)]',
                     'border border-violet-500/20',
                     'hover:border-violet-500/40',
@@ -306,17 +306,17 @@ export function Home({ onNavigate }: HomeProps) {
                   )}
                 >
                   <div className={cn(
-                    'w-14 h-14 rounded-2xl mx-auto mb-4',
+                    'w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl mx-auto mb-3 sm:mb-4',
                     'flex items-center justify-center',
                     'bg-gradient-to-br shadow-lg',
                     service.gradient
                   )}>
-                    <Icon className="w-7 h-7 text-white" />
+                    <Icon className="w-5 h-5 sm:w-7 sm:h-7 text-white" />
                   </div>
-                  <h3 className="font-bold text-base mb-1.5 text-white group-hover:text-violet-300 transition-colors">
+                  <h3 className="font-bold text-sm sm:text-base mb-1 sm:mb-1.5 text-white group-hover:text-violet-300 transition-colors">
                     {service.title}
                   </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
                     {service.desc}
                   </p>
                 </motion.div>
@@ -327,14 +327,14 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="px-6 py-16 w-[60%] mx-auto">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className={cn(
-            'rounded-3xl p-8 relative overflow-hidden',
+            'rounded-2xl sm:rounded-3xl p-5 sm:p-8 relative overflow-hidden',
             'bg-gradient-to-br from-violet-950/40 to-purple-950/20',
             'border border-violet-500/20'
           )}
@@ -344,19 +344,19 @@ export function Home({ onNavigate }: HomeProps) {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
           
           <div className="relative z-10">
-            <div className="text-center mb-8">
-              <span className="text-amber-400 text-sm font-medium tracking-wider uppercase mb-2 block">
+            <div className="text-center mb-6 sm:mb-8">
+              <span className="text-amber-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-2 block">
                 ¿Por qué elegirnos?
               </span>
-              <h2 className="text-2xl font-bold text-white mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
                 La mejor elección para tu día
               </h2>
-              <p className="text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-400">
                 Nos especializamos en hacer tus sueños realidad
               </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {highlights.map((item, idx) => {
                 const Icon = item.icon;
                 return (
@@ -367,16 +367,16 @@ export function Home({ onNavigate }: HomeProps) {
                     viewport={{ once: true }}
                     transition={{ delay: item.delay, duration: 0.4 }}
                     className={cn(
-                      'flex items-center gap-3 p-4 rounded-xl',
+                      'flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl',
                       'bg-white/[0.03] border border-white/[0.06]',
                       'hover:bg-white/[0.06] hover:border-white/[0.1]',
                       'transition-all duration-300'
                     )}
                   >
-                    <div className="p-2 rounded-lg bg-amber-500/10">
-                      <Icon className="w-5 h-5 text-amber-400" />
+                    <div className="p-1.5 sm:p-2 rounded-lg bg-amber-500/10 flex-shrink-0">
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
                     </div>
-                    <span className="text-sm font-medium text-slate-200">
+                    <span className="text-xs sm:text-sm font-medium text-slate-200 leading-tight">
                       {item.text}
                     </span>
                   </motion.div>
@@ -388,14 +388,14 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Final CTA Section */}
-      <section className="px-6 py-16 w-[60%] mx-auto">
+      <section className="px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className={cn(
-            'rounded-3xl p-8 text-center relative overflow-hidden',
+            'rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden',
             'bg-gradient-to-br from-violet-600 via-violet-700 to-purple-800'
           )}
         >
@@ -409,12 +409,12 @@ export function Home({ onNavigate }: HomeProps) {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <Sparkles className="w-12 h-12 text-amber-300 mx-auto mb-4" />
+              <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-amber-300 mx-auto mb-3 sm:mb-4" />
             </motion.div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3">
               ¿Lista para tu gran noche?
             </h2>
-            <p className="text-violet-200 mb-8 max-w-xs mx-auto">
+            <p className="text-violet-200 mb-6 sm:mb-8 max-w-xs mx-auto text-sm sm:text-base">
               Escribinos y empecemos a planear tu evento soñado
             </p>
             <motion.a
@@ -424,9 +424,9 @@ export function Home({ onNavigate }: HomeProps) {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={cn(
-                'w-full py-4 rounded-2xl',
+                'w-full py-3.5 sm:py-4 rounded-2xl',
                 'flex items-center justify-center gap-2',
-                'font-bold text-lg',
+                'font-bold text-base sm:text-lg',
                 'bg-white text-violet-700',
                 'shadow-xl shadow-black/20',
                 'transition-all duration-300',
@@ -435,7 +435,7 @@ export function Home({ onNavigate }: HomeProps) {
             >
               <MessageCircle className="w-5 h-5" />
               Consultanos por WhatsApp
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform hidden sm:inline-block" />
             </motion.a>
           </div>
         </motion.div>

@@ -153,7 +153,8 @@ export function PhotoUploader({ photos, uploading, isAdmin, onAddPhotos, onRemov
                       e.stopPropagation();
                       if (photo.id) onRemovePhoto(photo.id);
                     }}
-                    className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500/80"
+                    aria-label="Eliminar foto"
+                    className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-black/60 text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-red-500/80 touch-manipulation"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>

@@ -77,28 +77,28 @@ export function Galeria() {
       tabIndex={0}
     >
       {/* Header */}
-      <div className="px-6 pt-10 pb-6">
+      <div className="px-4 sm:px-6 pt-8 sm:pt-10 pb-4 sm:pb-6">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between mb-4 sm:mb-6 gap-3">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
               <motion.div
                 className={cn(
-                  'p-4 rounded-2xl',
+                  'p-2.5 sm:p-4 rounded-xl sm:rounded-2xl flex-shrink-0',
                   'bg-gradient-to-br from-amber-400 to-orange-500',
                   'shadow-lg shadow-amber-500/25'
                 )}
                 whileHover={{ scale: 1.05, rotate: -5 }}
               >
-                <Camera className="w-7 h-7 text-violet-950" />
+                <Camera className="w-5 h-5 sm:w-7 sm:h-7 text-violet-950" />
               </motion.div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-white truncate">
                   Galería
                 </h1>
-                <p className="text-sm text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-400 truncate">
                   Momentos inolvidables de nuestras fiestas
                 </p>
               </div>
@@ -117,7 +117,7 @@ export function Galeria() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="flex items-center gap-3 overflow-x-auto pb-3 scrollbar-hide"
+          className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-3 scrollbar-hide"
         >
           <Filter className="w-4 h-4 text-slate-500 flex-shrink-0" />
           
@@ -133,7 +133,7 @@ export function Galeria() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={cn(
-                  'flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium',
+                  'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium',
                   'whitespace-nowrap transition-all duration-300',
                   filter === f.value
                     ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25'
@@ -156,7 +156,7 @@ export function Galeria() {
         >
           {uniqueDates.map((date) => {
             const formattedDate = new Date(date).toLocaleDateString('es-ES', {
-              month: 'long',
+              month: 'short',
               year: 'numeric',
             });
             
@@ -164,7 +164,7 @@ export function Galeria() {
               <span
                 key={date}
                 className={cn(
-                  'px-3 py-1.5 rounded-full text-xs',
+                  'px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs',
                   'bg-white/5 border border-white/10',
                   'text-slate-500 capitalize'
                 )}
@@ -177,7 +177,7 @@ export function Galeria() {
       </div>
 
       {/* Photo Uploader */}
-      <div className="px-6 pb-4">
+      <div className="px-4 sm:px-6 pb-4">
         <PhotoUploader
           photos={photos}
           uploading={uploading}
@@ -188,10 +188,10 @@ export function Galeria() {
       </div>
 
       {/* Photos Grid - Masonry Style */}
-      <div className="px-6 py-4">
+      <div className="px-4 sm:px-6 py-3 sm:py-4">
         {filteredPhotos.length > 0 ? (
           <motion.div 
-            className="grid grid-cols-2 gap-3"
+            className="grid grid-cols-2 gap-2 sm:gap-3"
             variants={staggerContainer}
             initial="initial"
             animate="animate"
@@ -203,8 +203,8 @@ export function Galeria() {
                 onClick={() => handlePhotoClick(index)}
                 className={cn(
                   'relative overflow-hidden cursor-pointer group',
-                  'rounded-2xl border border-white/10',
-                  index === 0 ? 'col-span-2 aspect-[16/9]' : 
+                  'rounded-xl sm:rounded-2xl border border-white/10',
+                  index === 0 ? 'col-span-2 aspect-[16/10] sm:aspect-[16/9]' : 
                   index === 3 ? 'col-span-1 aspect-square' : 
                   index % 3 === 0 ? 'aspect-[4/5]' : 'aspect-square'
                 )}
@@ -215,27 +215,28 @@ export function Galeria() {
                   src={photo.url}
                   alt={`Fiesta de 15 - ${photo.event_date}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
                 />
                 
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                {/* Gradient overlay - always visible on mobile for better tap affordance */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300" />
                 
                 {/* Featured badge */}
                 {photo.featured && (
-                  <div className="absolute top-3 right-3 p-2 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg">
-                    <Star className="w-3.5 h-3.5 text-violet-950 fill-violet-950" />
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 p-1.5 sm:p-2 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg">
+                    <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-violet-950 fill-violet-950" />
                   </div>
                 )}
 
-                {/* Hover content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                {/* Hover content - visible on mobile too */}
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-4 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300">
                   <div className="flex items-center gap-2 text-white">
-                    <Eye className="w-4 h-4" />
-                    <span className="text-sm font-medium">Ver foto</span>
+                    <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span className="text-xs sm:text-sm font-medium">Ver foto</span>
                   </div>
-                  <p className="text-xs text-white/70 mt-1">
+                  <p className="text-[10px] sm:text-xs text-white/70 mt-1">
                     {new Date(photo.event_date || '').toLocaleDateString('es-ES', {
-                      month: 'long',
+                      month: 'short',
                       year: 'numeric',
                     })}
                   </p>
@@ -270,34 +271,34 @@ export function Galeria() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="px-6 py-8"
+        className="px-4 sm:px-6 py-6 sm:py-8"
       >
         <div className={cn(
-          'p-6 rounded-3xl',
+          'p-4 sm:p-6 rounded-2xl sm:rounded-3xl',
           'bg-gradient-to-br from-violet-950/30 to-purple-950/20',
           'border border-violet-500/20'
         )}>
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
             <div>
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Crown className="w-4 h-4 text-amber-400" />
-                <span className="text-2xl font-bold text-white">500+</span>
+                <Crown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+                <span className="text-xl sm:text-2xl font-bold text-white">500+</span>
               </div>
-              <p className="text-xs text-slate-400">Fiestas realizadas</p>
+              <p className="text-[10px] sm:text-xs text-slate-400">Fiestas realizadas</p>
             </div>
             <div className="border-x border-white/10">
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Camera className="w-4 h-4 text-violet-400" />
-                <span className="text-2xl font-bold text-white">10k+</span>
+                <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-violet-400" />
+                <span className="text-xl sm:text-2xl font-bold text-white">10k+</span>
               </div>
-              <p className="text-xs text-slate-400">Fotos capturadas</p>
+              <p className="text-[10px] sm:text-xs text-slate-400">Fotos capturadas</p>
             </div>
             <div>
               <div className="flex items-center justify-center gap-1 mb-1">
-                <Star className="w-4 h-4 text-pink-400" />
-                <span className="text-2xl font-bold text-white">100%</span>
+                <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-400" />
+                <span className="text-xl sm:text-2xl font-bold text-white">100%</span>
               </div>
-              <p className="text-xs text-slate-400">Clientes felices</p>
+              <p className="text-[10px] sm:text-xs text-slate-400">Clientes felices</p>
             </div>
           </div>
         </div>
@@ -320,9 +321,10 @@ export function Galeria() {
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="absolute top-4 right-4 z-10 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 p-2.5 sm:p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors touch-manipulation"
+              aria-label="Cerrar galería"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.button>
 
             {/* Navigation */}
@@ -335,9 +337,10 @@ export function Galeria() {
                     onClick={handlePrevPhoto}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 p-3 sm:p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors touch-manipulation"
+                    aria-label="Foto anterior"
                   >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                   </motion.button>
                   <motion.button
                     initial={{ opacity: 0, x: 20 }}
@@ -345,9 +348,10 @@ export function Galeria() {
                     onClick={handleNextPhoto}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 p-3 sm:p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors touch-manipulation"
+                    aria-label="Siguiente foto"
                   >
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
                   </motion.button>
                 </>
               )}
@@ -374,14 +378,14 @@ export function Galeria() {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4"
+              className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 sm:gap-4"
             >
-              <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-sm">
+              <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-xs sm:text-sm">
                 {selectedPhotoIndex + 1} / {filteredPhotos.length}
               </div>
               {filteredPhotos[selectedPhotoIndex].featured && (
-                <div className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-violet-950 text-sm font-medium flex items-center gap-1">
-                  <Star className="w-4 h-4" />
+                <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 text-violet-950 text-xs sm:text-sm font-medium flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   Destacada
                 </div>
               )}

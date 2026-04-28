@@ -39,7 +39,7 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
       transition={{ delay: 0.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
         'fixed bottom-0 left-0 right-0 z-50',
-        'px-4 pb-6 pt-3',
+        'px-3 sm:px-4 pb-safe pt-2 sm:pt-3',
       )}
     >
       {/* Glow effect behind nav */}
@@ -48,7 +48,7 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
       <div className="relative max-w-md mx-auto">
         {/* Nav container with glass effect */}
         <div className={cn(
-          'flex items-center justify-around p-2 rounded-3xl',
+          'flex items-center justify-around p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl',
           'bg-white/[0.03] ',
           'border border-white/[0.08]',
           'shadow-2xl shadow-black/40',
@@ -65,8 +65,8 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={cn(
-                  'relative flex flex-col items-center gap-1 py-3 px-5 rounded-2xl',
-                  'transition-all duration-300',
+                  'relative flex flex-col items-center gap-1 py-2.5 sm:py-3 px-4 sm:px-5 rounded-xl sm:rounded-2xl',
+                  'transition-all duration-300 min-w-[64px] sm:min-w-[80px]',
                   isActive ? 'text-white' : 'text-slate-500 hover:text-slate-300'
                 )}
               >

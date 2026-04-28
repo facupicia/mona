@@ -20,7 +20,7 @@ export function WhatsAppButton({ className }: WhatsAppButtonProps) {
   };
 
   return (
-    <div className="fixed right-5 z-40" style={{ bottom: '100px' }}>
+    <div className="fixed right-4 sm:right-5 z-40" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 5.5rem)' }}>
       {/* Label */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -49,8 +49,9 @@ export function WhatsAppButton({ className }: WhatsAppButtonProps) {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleClick}
+        aria-label="Contactar por WhatsApp"
         className={cn(
-          'relative w-14 h-14 rounded-full',
+          'relative w-12 h-12 sm:w-14 sm:h-14 rounded-full',
           'flex items-center justify-center',
           'bg-gradient-to-br from-green-400 to-green-600',
           'text-white shadow-2xl',
@@ -100,7 +101,7 @@ export function WhatsAppButton({ className }: WhatsAppButtonProps) {
             repeatDelay: 3
           }}
         >
-          <Phone className="w-6 h-6 relative z-10" />
+          <Phone className="w-5 h-5 sm:w-6 sm:h-6 relative z-10" />
         </motion.div>
 
         {/* Shine effect on hover */}
@@ -112,7 +113,7 @@ export function WhatsAppButton({ className }: WhatsAppButtonProps) {
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1.5, type: "spring" }}
-        className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 border-2 border-[hsl(265,50%,4%)]"
+        className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-red-500 border-2 border-[hsl(265,50%,4%)]"
       >
         <motion.div
           className="absolute inset-0 rounded-full bg-red-500"
