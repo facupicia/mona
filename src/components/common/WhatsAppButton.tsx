@@ -1,22 +1,19 @@
 import { motion } from 'framer-motion';
 import { Phone, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getWhatsAppUrl, whatsappNumber } from '@/lib/contact';
 
 interface WhatsAppButtonProps {
   className?: string;
 }
 
 export function WhatsAppButton({ className }: WhatsAppButtonProps) {
-  const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '';
-  const message = '¡Hola! Me interesa contratarlos para una fiesta de 15 años 🎉';
-  
   const handleClick = () => {
-    if (!phoneNumber) {
+    if (!whatsappNumber) {
       console.warn('VITE_WHATSAPP_NUMBER no configurado');
       return;
     }
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(getWhatsAppUrl(), '_blank');
   };
 
   return (

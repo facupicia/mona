@@ -12,8 +12,12 @@ import {
   PartyPopper,
   Gem,
   ChevronRight,
-  MessageCircle
+  MessageCircle,
+  BadgePercent,
+  CreditCard,
+  CalendarDays
 } from 'lucide-react';
+import { getWhatsAppUrl } from '@/lib/contact';
 
 interface HomeProps {
   onNavigate: (page: 'home' | 'galeria') => void;
@@ -33,6 +37,24 @@ const staggerContainer = {
     }
   }
 };
+
+const backgroundParticles = [
+  { left: '8%', top: '18%', size: 'w-1 h-1', color: 'bg-amber-300/50', delay: 0 },
+  { left: '18%', top: '72%', size: 'w-1.5 h-1.5', color: 'bg-violet-300/35', delay: 0.7 },
+  { left: '31%', top: '36%', size: 'w-1 h-1', color: 'bg-white/35', delay: 1.1 },
+  { left: '46%', top: '84%', size: 'w-1 h-1', color: 'bg-amber-200/45', delay: 1.6 },
+  { left: '62%', top: '24%', size: 'w-1.5 h-1.5', color: 'bg-violet-200/35', delay: 0.4 },
+  { left: '74%', top: '58%', size: 'w-1 h-1', color: 'bg-amber-300/45', delay: 1.9 },
+  { left: '88%', top: '14%', size: 'w-1 h-1', color: 'bg-white/30', delay: 1.3 },
+  { left: '92%', top: '78%', size: 'w-1.5 h-1.5', color: 'bg-violet-300/30', delay: 0.9 },
+];
+
+const lightTrails = [
+  { left: '6%', top: '22%', width: 'w-40 sm:w-64', rotate: '-rotate-[18deg]', color: 'from-transparent via-amber-300/25 to-transparent', delay: 0 },
+  { left: '52%', top: '16%', width: 'w-56 sm:w-80', rotate: '-rotate-[24deg]', color: 'from-transparent via-violet-300/20 to-transparent', delay: 1.2 },
+  { left: '28%', top: '64%', width: 'w-48 sm:w-72', rotate: '-rotate-[14deg]', color: 'from-transparent via-cyan-200/15 to-transparent', delay: 2.1 },
+  { left: '68%', top: '82%', width: 'w-44 sm:w-64', rotate: '-rotate-[20deg]', color: 'from-transparent via-amber-200/20 to-transparent', delay: 0.6 },
+];
 
 export function Home({ onNavigate }: HomeProps) {
   const { theme } = useTheme();
@@ -71,10 +93,79 @@ export function Home({ onNavigate }: HomeProps) {
     { icon: Gem, text: 'Servicio premium', delay: 0.3 },
   ];
 
+  const updates = [
+    {
+      icon: BadgePercent,
+      eyebrow: 'Contratando en abril y mayo',
+      title: '25% OFF',
+      desc: 'Promo vigente para reservar tu evento viernes. Ideal para congelar fecha y asegurar producción completa.',
+      action: 'Consultar promo',
+      accent: 'from-amber-300 to-orange-500',
+      backdrop: 'from-rose-950/80 via-black/70 to-violet-950/80',
+    },
+    {
+      icon: CreditCard,
+      eyebrow: 'Financia tu evento',
+      title: '3, 6 y 12 cuotas',
+      desc: 'Opciones de pago flexibles para organizar tu fiesta con tiempo, sin resignar música, luces ni ambientación.',
+      action: 'Ver financiación',
+      accent: 'from-cyan-300 to-violet-400',
+      backdrop: 'from-emerald-950/70 via-black/70 to-violet-950/80',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-[hsl(265,50%,4%)] overflow-hidden">
+    <div className="relative min-h-screen bg-[hsl(265,50%,4%)] overflow-hidden">
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(168,85,247,0.08)_36%,transparent_58%),radial-gradient(ellipse_at_50%_0%,rgba(245,158,11,0.08),transparent_42%)]" />
+        <div className="absolute inset-0 opacity-[0.18] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:72px_72px]" />
+
+        {lightTrails.map((trail, index) => (
+          <motion.div
+            key={`trail-${index}`}
+            className={cn(
+              'absolute h-px blur-[1px] bg-gradient-to-r',
+              trail.width,
+              trail.rotate,
+              trail.color
+            )}
+            style={{ left: trail.left, top: trail.top }}
+            animate={{
+              x: ['-14vw', '14vw', '-14vw'],
+              opacity: [0.08, 0.55, 0.08],
+            }}
+            transition={{
+              duration: 9 + index * 1.8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: trail.delay,
+            }}
+          />
+        ))}
+
+        {backgroundParticles.map((particle, index) => (
+          <motion.span
+            key={`particle-${index}`}
+            className={cn('absolute rounded-full shadow-[0_0_14px_currentColor]', particle.size, particle.color)}
+            style={{ left: particle.left, top: particle.top }}
+            animate={{
+              y: [0, -18, 0],
+              x: [0, 8, 0],
+              opacity: [0.25, 0.9, 0.25],
+              scale: [1, 1.35, 1],
+            }}
+            transition={{
+              duration: 5 + index * 0.4,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: particle.delay,
+            }}
+          />
+        ))}
+      </div>
+
       {/* Hero Section */}
-      <section className="relative min-h-[100dvh] w-full overflow-hidden">
+      <section className="relative z-10 min-h-[100dvh] w-full overflow-hidden">
         {/* Background with Overlay */}
         <div className="absolute inset-0 bg-[hsl(265,50%,8%)]">
           <div className={cn(
@@ -196,7 +287,7 @@ export function Home({ onNavigate }: HomeProps) {
           >
             {/* Primary CTA */}
             <motion.a
-              href="https://wa.me/5491112345678"
+              href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02, y: -2 }}
@@ -240,8 +331,112 @@ export function Home({ onNavigate }: HomeProps) {
         </div>
       </section>
 
+      {/* Instagram Updates Section */}
+      <section className="relative z-10 px-4 sm:px-6 py-14 sm:py-18 max-w-7xl mx-auto">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+
+        <motion.div
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.div
+            className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-7 sm:mb-10"
+            variants={fadeInUp}
+          >
+            <div>
+              <span className="inline-flex items-center gap-2 text-amber-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-2">
+                Novedades
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
+                Promos activas para tu fiesta
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base max-w-xl">
+                Estas son las novedades que estamos compartiendo en redes para quienes quieren reservar fecha o financiar su evento.
+              </p>
+            </div>
+
+            <div className="inline-flex items-center gap-2 self-start sm:self-auto px-3 py-2 rounded-full bg-white/[0.06] border border-white/10 text-slate-300 text-xs sm:text-sm">
+              <CalendarDays className="w-4 h-4 text-amber-400" />
+              Abril y mayo
+            </div>
+          </motion.div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            {updates.map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.article
+                  key={item.title}
+                  variants={fadeInUp}
+                  whileHover={{ y: -4 }}
+                  className={cn(
+                    'relative min-h-[360px] sm:min-h-[420px] overflow-hidden rounded-2xl sm:rounded-3xl',
+                    'border border-white/10 bg-[hsl(265,35%,8%)] shadow-2xl shadow-black/30'
+                  )}
+                >
+                  <div className={cn('absolute inset-0 bg-gradient-to-br', item.backdrop)} />
+                  <div
+                    className={cn(
+                      'absolute inset-0 opacity-70',
+                      index === 0
+                        ? 'bg-[radial-gradient(circle_at_68%_20%,rgba(255,214,153,0.22),transparent_28%),radial-gradient(circle_at_18%_78%,rgba(168,85,247,0.25),transparent_32%)]'
+                        : 'bg-[radial-gradient(circle_at_25%_18%,rgba(16,185,129,0.22),transparent_30%),radial-gradient(circle_at_78%_72%,rgba(168,85,247,0.28),transparent_34%)]'
+                    )}
+                  />
+                  <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                  <div className="relative z-10 flex min-h-[360px] sm:min-h-[420px] flex-col justify-between p-5 sm:p-7">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 text-white">
+                        <div className={cn('p-2 rounded-xl bg-gradient-to-br', item.accent)}>
+                          <Icon className="w-4 h-4 text-violet-950" />
+                        </div>
+                        <span className="text-xs font-semibold tracking-wider uppercase">
+                          Mona eventos
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-[11px] sm:text-xs font-semibold tracking-wider uppercase text-white/75 mb-2">
+                        {item.eyebrow}
+                      </p>
+                      <h3 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none mb-4">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-md mb-5">
+                        {item.desc}
+                      </p>
+                      <motion.a
+                        href={getWhatsAppUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        className={cn(
+                          'inline-flex items-center gap-2 rounded-full px-4 py-2.5',
+                          'bg-white text-violet-950 text-sm font-bold',
+                          'shadow-lg shadow-black/20'
+                        )}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {item.action}
+                      </motion.a>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        </motion.div>
+      </section>
+
       {/* Services Section */}
-      <section className="px-4 sm:px-6 py-16 sm:py-20 relative max-w-7xl mx-auto">
+      <section className="relative z-10 px-4 sm:px-6 py-16 sm:py-20 max-w-7xl mx-auto">
         {/* Background decoration */}
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
         
@@ -308,7 +503,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
+      <section className="relative z-10 px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -369,7 +564,7 @@ export function Home({ onNavigate }: HomeProps) {
       </section>
 
       {/* Final CTA Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
+      <section className="relative z-10 px-4 sm:px-6 py-12 sm:py-16 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -399,7 +594,7 @@ export function Home({ onNavigate }: HomeProps) {
               Escribinos y empecemos a planear tu evento soñado
             </p>
             <motion.a
-              href="https://wa.me/5491112345678"
+              href={getWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
