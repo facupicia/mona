@@ -128,7 +128,10 @@ export function usePhotos() {
 
             if (!res.ok) {
               const err = await res.json().catch(() => ({}));
-              throw new Error(err.error || 'Upload failed');
+              const errorMessage =
+                [err.error, err.details].filter(Boolean).join(': ') ||
+                'Upload failed';
+              throw new Error(errorMessage);
             }
 
             const { url, pathname }: { url: string; pathname: string } =
