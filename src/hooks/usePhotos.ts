@@ -69,7 +69,14 @@ export function usePhotos() {
         if (res.ok) {
           return readJsonResponse(res);
         }
-        throw new Error('No se pudieron cargar las fotos');
+        return readJsonResponse(res)
+          .catch(() => ({}))
+          .then((err) => {
+            const errorMessage =
+              [err.error, err.details].filter(Boolean).join(': ') ||
+              'No se pudieron cargar las fotos';
+            throw new Error(errorMessage);
+          });
       })
       .then((data) => {
         if (cancelled || !data) return;
