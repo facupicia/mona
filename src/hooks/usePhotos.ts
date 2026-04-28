@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Photo } from '@/types';
 
-const LOCAL_STORAGE_KEY = 'mona-gallery-user-photos';
-
 function resizeAndConvertToBase64(
   file: File,
   maxWidth = 1200,
@@ -39,16 +37,29 @@ function resizeAndConvertToBase64(
   });
 }
 
-type StorageMode = 'vercel' | 'local';
+async function readJsonResponse(res: Response) {
+  const contentType = res.headers.get('content-type') ?? '';
+
+  if (!contentType.includes('application/json')) {
+    const text = await res.text();
+    const preview = text.trim().slice(0, 80);
+    const isSourceCode = preview.startsWith('import ');
+    throw new Error(
+      isSourceCode
+        ? 'La API de Vercel no se está ejecutando. En local usá npm run dev:vercel, no npm run dev.'
+        : `La API no devolvió JSON: ${preview || res.statusText}`
+    );
+  }
+
+  return res.json();
+}
 
 export function usePhotos() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [mode, setMode] = useState<StorageMode>('local');
 
-  // Detectar si estamos en Vercel (producción) o local
   useEffect(() => {
     let cancelled = false;
 
@@ -56,10 +67,9 @@ export function usePhotos() {
       .then((res) => {
         if (cancelled) return null;
         if (res.ok) {
-          setMode('vercel');
-          return res.json();
+          return readJsonResponse(res);
         }
-        throw new Error('Not vercel');
+        throw new Error('No se pudieron cargar las fotos');
       })
       .then((data) => {
         if (cancelled || !data) return;
@@ -84,18 +94,14 @@ export function usePhotos() {
           });
         }
       })
-      .catch(() => {
-        // Fallback a localStorage
+      .catch((error) => {
         if (cancelled) return;
-        try {
-          const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-          if (stored) {
-            const userPhotos: Photo[] = JSON.parse(stored);
-            setPhotos((prev) => [...prev, ...userPhotos]);
-          }
-        } catch {
-          // ignore
-        }
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'No se pudieron cargar las fotos';
+        setUploadError(message);
+        console.error('Photo list failed:', error);
       })
       .finally(() => {
         if (!cancelled) setIsLoaded(true);
@@ -118,55 +124,34 @@ export function usePhotos() {
 
           const base64 = await resizeAndConvertToBase64(file);
 
-          if (mode === 'vercel') {
-            const filename = `user-${Date.now()}-${Math.random().toString(36).slice(2, 9)}.jpg`;
-            const res = await fetch('/api/upload', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ image: base64, filename }),
-            });
+          const filename = `user-${Date.now()}-${Math.random().toString(36).slice(2, 9)}.jpg`;
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: base64, filename }),
+          });
 
-            if (!res.ok) {
-              const err = await res.json().catch(() => ({}));
-              const errorMessage =
-                [err.error, err.details].filter(Boolean).join(': ') ||
-                'Upload failed';
-              throw new Error(errorMessage);
-            }
+          if (!res.ok) {
+            const err = await readJsonResponse(res).catch(() => ({}));
+            const errorMessage =
+              [err.error, err.details].filter(Boolean).join(': ') ||
+              'Upload failed';
+            throw new Error(errorMessage);
+          }
 
-            const { url, pathname }: { url: string; pathname: string } =
-              await res.json();
+          const { url, pathname }: { url: string; pathname: string } =
+            await readJsonResponse(res);
 
-            setPhotos((prev) => [
-              ...prev,
-              {
-                id: pathname,
-                url,
-                pathname,
-                event_date: new Date().toISOString().split('T')[0],
-                featured: false,
-              },
-            ]);
-          } else {
-            // localStorage fallback
-            const photo: Photo = {
-              id: `user-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
-              url: base64,
+          setPhotos((prev) => [
+            ...prev,
+            {
+              id: pathname,
+              url,
+              pathname,
               event_date: new Date().toISOString().split('T')[0],
               featured: false,
-            };
-            setPhotos((prev) => {
-              const updated = [...prev, photo];
-              const userPhotos = updated.filter(
-                (p) => p.id?.startsWith('user-')
-              );
-              localStorage.setItem(
-                LOCAL_STORAGE_KEY,
-                JSON.stringify(userPhotos)
-              );
-              return updated;
-            });
-          }
+            },
+          ]);
         }
       } catch (error) {
         const message =
@@ -179,7 +164,7 @@ export function usePhotos() {
         setUploading(false);
       }
     },
-    [mode]
+    []
   );
 
   const removePhoto = useCallback(
@@ -187,32 +172,38 @@ export function usePhotos() {
       const photo = photos.find((p) => p.id === id);
       if (!photo) return;
 
-      if (mode === 'vercel' && photo.pathname) {
-        try {
-          await fetch('/api/delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pathname: photo.pathname }),
-          });
-        } catch {
-          // ignore
+      if (!photo.pathname) {
+        setPhotos((prev) => prev.filter((p) => p.id !== id));
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pathname: photo.pathname }),
+        });
+
+        if (!res.ok) {
+          const err = await readJsonResponse(res).catch(() => ({}));
+          const errorMessage =
+            [err.error, err.details].filter(Boolean).join(': ') ||
+            'No se pudo eliminar la foto';
+          throw new Error(errorMessage);
         }
-      } else if (mode === 'local') {
-        try {
-          const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-          if (stored) {
-            const userPhotos: Photo[] = JSON.parse(stored);
-            const updated = userPhotos.filter((p) => p.id !== id);
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-          }
-        } catch {
-          // ignore
-        }
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'No se pudo eliminar la foto';
+        setUploadError(message);
+        console.error('Photo delete failed:', error);
+        return;
       }
 
       setPhotos((prev) => prev.filter((p) => p.id !== id));
     },
-    [mode, photos]
+    [photos]
   );
 
   return { photos, isLoaded, uploading, uploadError, addPhotos, removePhoto };
