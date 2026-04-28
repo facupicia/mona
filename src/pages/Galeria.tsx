@@ -19,7 +19,7 @@ const fadeInUp = {
 };
 
 export function Galeria() {
-  const { photos, uploading, addPhotos, removePhoto } = usePhotos();
+  const { photos, uploading, uploadError, addPhotos, removePhoto } = usePhotos();
   const { isAdmin, login, logout, openLogin } = useAdminAuth();
   const [filter, setFilter] = useState<'all' | 'featured'>('all');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
@@ -181,6 +181,7 @@ export function Galeria() {
         <PhotoUploader
           photos={photos}
           uploading={uploading}
+          uploadError={uploadError}
           isAdmin={isAdmin}
           onAddPhotos={addPhotos}
           onRemovePhoto={removePhoto}

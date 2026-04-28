@@ -1,5 +1,6 @@
 import { put } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { getBlobReadWriteToken } from './blobToken';
 
 export default async function handler(
   req: VercelRequest,
@@ -11,6 +12,7 @@ export default async function handler(
 
   try {
     const { image, filename } = req.body;
+    const token = getBlobReadWriteToken();
 
     if (!image || typeof image !== 'string' || !filename || typeof filename !== 'string') {
       return res.status(400).json({ error: 'Missing image or filename' });
@@ -21,7 +23,7 @@ export default async function handler(
     const buffer = Buffer.from(base64Data, 'base64');
 
     // Check if BLOB_READ_WRITE_TOKEN is configured
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    if (!token) {
       return res.status(500).json({ error: 'BLOB_READ_WRITE_TOKEN is not configured' });
     }
 
@@ -33,16 +35,15 @@ export default async function handler(
     const blob = await put(filename, buffer, {
       access: 'public',
       contentType: 'image/jpeg',
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+      token,
     });
 
     return res.status(200).json({ url: blob.url, pathname: blob.pathname });
-  } catch (error: any) {
-    // eslint-disable-next-line no-console
+  } catch (error: unknown) {
     console.error('Upload error:', error);
     return res.status(500).json({
       error: 'Upload failed',
-      details: error?.message || 'Unknown error',
+      details: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 }

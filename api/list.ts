@@ -1,5 +1,6 @@
 import { list } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { getBlobReadWriteToken } from './blobToken';
 
 export default async function handler(
   req: VercelRequest,
@@ -10,7 +11,13 @@ export default async function handler(
   }
 
   try {
-    const { blobs } = await list();
+    const token = getBlobReadWriteToken();
+
+    if (!token) {
+      return res.status(500).json({ error: 'BLOB_READ_WRITE_TOKEN is not configured' });
+    }
+
+    const { blobs } = await list({ token });
 
     const photos = blobs.map((b) => ({
       url: b.url,
@@ -20,7 +27,6 @@ export default async function handler(
 
     return res.status(200).json({ photos });
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('List error:', error);
     return res.status(500).json({ error: 'List failed' });
   }

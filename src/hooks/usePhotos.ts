@@ -45,6 +45,7 @@ export function usePhotos() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [mode, setMode] = useState<StorageMode>('local');
 
   // Detectar si estamos en Vercel (producción) o local
@@ -109,6 +110,7 @@ export function usePhotos() {
     async (files: FileList | null) => {
       if (!files || files.length === 0) return;
       setUploading(true);
+      setUploadError(null);
 
       try {
         for (const file of Array.from(files)) {
@@ -163,6 +165,13 @@ export function usePhotos() {
             });
           }
         }
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'No se pudieron subir las fotos';
+        setUploadError(message);
+        console.error('Photo upload failed:', error);
       } finally {
         setUploading(false);
       }
@@ -203,5 +212,5 @@ export function usePhotos() {
     [mode, photos]
   );
 
-  return { photos, isLoaded, uploading, addPhotos, removePhoto };
+  return { photos, isLoaded, uploading, uploadError, addPhotos, removePhoto };
 }

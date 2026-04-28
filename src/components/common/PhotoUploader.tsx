@@ -7,13 +7,13 @@ import type { Photo } from '@/types';
 interface PhotoUploaderProps {
   photos: Photo[];
   uploading: boolean;
+  uploadError?: string | null;
   isAdmin: boolean;
   onAddPhotos: (files: FileList | null) => void;
   onRemovePhoto: (id: string) => void;
 }
 
-export function PhotoUploader({ photos, uploading, isAdmin, onAddPhotos, onRemovePhoto }: PhotoUploaderProps) {
-  if (!isAdmin) return null;
+export function PhotoUploader({ photos, uploading, uploadError, isAdmin, onAddPhotos, onRemovePhoto }: PhotoUploaderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,6 +52,8 @@ export function PhotoUploader({ photos, uploading, isAdmin, onAddPhotos, onRemov
     },
     [onAddPhotos]
   );
+
+  if (!isAdmin) return null;
 
   return (
     <div className="space-y-4">
@@ -110,12 +112,18 @@ export function PhotoUploader({ photos, uploading, isAdmin, onAddPhotos, onRemov
                 <p className="text-sm font-medium text-white">
                   {isDragging ? 'Suelta las fotos aquí' : 'Arrastra fotos aquí o haz clic para seleccionar'}
                 </p>
-                <p className="text-xs text-slate-500 mt-1">JPG, PNG, WebP · Máx. 10MB por foto</p>
+                <p className="text-xs text-slate-500 mt-1">JPG, PNG, WebP · Se optimizan antes de subir</p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
+
+      {uploadError && (
+        <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+          {uploadError}
+        </p>
+      )}
 
       {/* User Photos Preview */}
       <AnimatePresence>
