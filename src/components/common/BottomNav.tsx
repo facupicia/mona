@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Home, Calendar, Camera } from 'lucide-react';
+import { Home, Camera } from 'lucide-react';
 
-type Page = 'home' | 'disponibilidad' | 'galeria';
+type Page = 'home' | 'galeria';
 
 interface BottomNavProps {
   currentPage: Page;
@@ -23,12 +23,6 @@ export function BottomNav({ currentPage, onNavigate }: BottomNavProps) {
         label: 'Inicio',
         icon: Home,
         gradient: 'from-violet-500 to-purple-600'
-      },
-      {
-        id: 'disponibilidad',
-        label: 'Fechas',
-        icon: Calendar,
-        gradient: 'from-pink-500 to-rose-600'
       },
       {
         id: 'galeria',

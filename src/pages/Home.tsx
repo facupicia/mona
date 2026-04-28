@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 import { cn } from '@/lib/utils';
 import { 
-  Calendar, 
   Sparkles, 
   Heart, 
   Music, 
@@ -12,11 +11,12 @@ import {
   Star,
   PartyPopper,
   Gem,
-  ChevronRight
+  ChevronRight,
+  MessageCircle
 } from 'lucide-react';
 
 interface HomeProps {
-  onNavigate: (page: 'home' | 'disponibilidad' | 'galeria') => void;
+  onNavigate: (page: 'home' | 'galeria') => void;
 }
 
 // Animaciones reutilizables
@@ -26,24 +26,12 @@ const fadeInUp = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
 };
 
-const fadeIn = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  transition: { duration: 0.8 }
-};
-
 const staggerContainer = {
   animate: {
     transition: {
       staggerChildren: 0.1
     }
   }
-};
-
-const scaleIn = {
-  initial: { opacity: 0, scale: 0.9 },
-  animate: { opacity: 1, scale: 1 },
-  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
 };
 
 export function Home({ onNavigate }: HomeProps) {
@@ -229,8 +217,10 @@ export function Home({ onNavigate }: HomeProps) {
             className="space-y-3 max-w-md mx-auto w-full"
           >
             {/* Primary CTA */}
-            <motion.button
-              onClick={() => onNavigate('disponibilidad')}
+            <motion.a
+              href="https://wa.me/5491112345678"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               className={cn(
@@ -245,10 +235,10 @@ export function Home({ onNavigate }: HomeProps) {
               )}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <Calendar className="w-5 h-5 relative z-10" />
-              <span className="relative z-10">Ver Disponibilidad</span>
+              <MessageCircle className="w-5 h-5 relative z-10" />
+              <span className="relative z-10">Consultanos por WhatsApp</span>
               <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
+            </motion.a>
 
             {/* Secondary CTA */}
             <motion.button
@@ -301,7 +291,7 @@ export function Home({ onNavigate }: HomeProps) {
 
           {/* Services Grid */}
           <div className="grid grid-cols-2 gap-4">
-            {services.map((service, idx) => {
+            {services.map((service) => {
               const Icon = service.icon;
               return (
                 <motion.div
@@ -428,10 +418,12 @@ export function Home({ onNavigate }: HomeProps) {
               ¿Lista para tu gran noche?
             </h2>
             <p className="text-violet-200 mb-8 max-w-xs mx-auto">
-              Consultá disponibilidad y reservá tu fecha ahora
+              Escribinos y empecemos a planear tu evento soñado
             </p>
-            <motion.button
-              onClick={() => onNavigate('disponibilidad')}
+            <motion.a
+              href="https://wa.me/5491112345678"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className={cn(
@@ -444,10 +436,10 @@ export function Home({ onNavigate }: HomeProps) {
                 'group'
               )}
             >
-              <Calendar className="w-5 h-5" />
-              Consultar Disponibilidad
+              <MessageCircle className="w-5 h-5" />
+              Consultanos por WhatsApp
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
+            </motion.a>
           </div>
         </motion.div>
       </section>

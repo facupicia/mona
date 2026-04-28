@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
+
 import { cn } from '@/lib/utils';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Photo } from '@/types';
@@ -10,12 +10,11 @@ interface PhotoGridProps {
 }
 
 export function PhotoGrid({ photos }: PhotoGridProps) {
-  const { theme } = useTheme();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // Agrupar fotos por fecha
   const groupedPhotos = photos.reduce((acc, photo) => {
-    const date = photo.event_date;
+    const date = photo.event_date || 'sin-fecha';
     if (!acc[date]) acc[date] = [];
     acc[date].push(photo);
     return acc;

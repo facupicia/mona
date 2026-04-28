@@ -5,11 +5,10 @@ import { BottomNav } from '@/components/common/BottomNav';
 import { WhatsAppButton } from '@/components/common/WhatsAppButton';
 import { Footer } from '@/components/common/Footer';
 import { Home } from '@/pages/Home';
-import { Disponibilidad } from '@/pages/Disponibilidad';
 import { Galeria } from '@/pages/Galeria';
 import './App.css';
 
-type Page = 'home' | 'disponibilidad' | 'galeria';
+type Page = 'home' | 'galeria';
 
 // Transiciones suaves y elegantes entre páginas
 const pageVariants = {
@@ -24,7 +23,7 @@ const pageVariants = {
     scale: 1,
     transition: {
       duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
   exit: (direction: number) => ({
@@ -33,13 +32,13 @@ const pageVariants = {
     scale: 0.98,
     transition: {
       duration: 0.3,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
 };
 
 // Mapeo de páginas para determinar dirección
-const pageOrder: Page[] = ['home', 'disponibilidad', 'galeria'];
+const pageOrder: Page[] = ['home', 'galeria'];
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -84,19 +83,6 @@ function AppContent() {
               exit="exit"
             >
               <Home onNavigate={handleNavigate} />
-            </motion.div>
-          )}
-          
-          {currentPage === 'disponibilidad' && (
-            <motion.div
-              key="disponibilidad"
-              custom={direction}
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              <Disponibilidad />
             </motion.div>
           )}
           

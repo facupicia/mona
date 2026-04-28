@@ -1,61 +1,12 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
+
 import { cn } from '@/lib/utils';
 import { Camera, Filter, X, ChevronLeft, ChevronRight, Star, Sparkles, Crown, Eye } from 'lucide-react';
-import type { Photo } from '@/types';
-
-// Fotos de ejemplo - reemplazar con fotos reales
-const mockPhotos: Photo[] = [
-  {
-    id: '1',
-    url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80',
-    event_date: '2025-12-15',
-    featured: true,
-  },
-  {
-    id: '2',
-    url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
-    event_date: '2025-12-15',
-    featured: true,
-  },
-  {
-    id: '3',
-    url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80',
-    event_date: '2025-11-20',
-    featured: true,
-  },
-  {
-    id: '4',
-    url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
-    event_date: '2025-11-20',
-    featured: false,
-  },
-  {
-    id: '5',
-    url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800&q=80',
-    event_date: '2025-10-08',
-    featured: false,
-  },
-  {
-    id: '6',
-    url: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800&q=80',
-    event_date: '2025-10-08',
-    featured: true,
-  },
-  {
-    id: '7',
-    url: 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80',
-    event_date: '2025-09-12',
-    featured: false,
-  },
-  {
-    id: '8',
-    url: 'https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=800&q=80',
-    event_date: '2025-09-12',
-    featured: false,
-  },
-];
+import { usePhotos } from '@/hooks/usePhotos';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { PhotoUploader } from '@/components/common/PhotoUploader';
+import { AdminLogin } from '@/components/common/AdminLogin';
 
 const staggerContainer = {
   animate: { transition: { staggerChildren: 0.05 } }
@@ -68,22 +19,23 @@ const fadeInUp = {
 };
 
 export function Galeria() {
-  const { theme } = useTheme();
+  const { photos, uploading, addPhotos, removePhoto } = usePhotos();
+  const { isAdmin, login, logout, openLogin } = useAdminAuth();
   const [filter, setFilter] = useState<'all' | 'featured'>('all');
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
 
   const filteredPhotos = useMemo(() => {
     if (filter === 'featured') {
-      return mockPhotos.filter(p => p.featured);
+      return photos.filter(p => p.featured);
     }
-    return mockPhotos;
-  }, [filter]);
+    return photos;
+  }, [filter, photos]);
 
   // Obtener fechas únicas para los chips
   const uniqueDates = useMemo(() => {
-    const dates = [...new Set(mockPhotos.map(p => p.event_date))];
+    const dates = [...new Set(photos.map(p => p.event_date).filter(Boolean))] as string[];
     return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-  }, []);
+  }, [photos]);
 
   const handlePhotoClick = (index: number) => {
     setSelectedPhotoIndex(index);
@@ -130,25 +82,33 @@ export function Galeria() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex items-center gap-4 mb-6">
-            <motion.div 
-              className={cn(
-                'p-4 rounded-2xl',
-                'bg-gradient-to-br from-amber-400 to-orange-500',
-                'shadow-lg shadow-amber-500/25'
-              )}
-              whileHover={{ scale: 1.05, rotate: -5 }}
-            >
-              <Camera className="w-7 h-7 text-violet-950" />
-            </motion.div>
-            <div>
-              <h1 className="text-2xl font-bold text-white">
-                Galería
-              </h1>
-              <p className="text-sm text-slate-400">
-                Momentos inolvidables de nuestras fiestas
-              </p>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <motion.div
+                className={cn(
+                  'p-4 rounded-2xl',
+                  'bg-gradient-to-br from-amber-400 to-orange-500',
+                  'shadow-lg shadow-amber-500/25'
+                )}
+                whileHover={{ scale: 1.05, rotate: -5 }}
+              >
+                <Camera className="w-7 h-7 text-violet-950" />
+              </motion.div>
+              <div>
+                <h1 className="text-2xl font-bold text-white">
+                  Galería
+                </h1>
+                <p className="text-sm text-slate-400">
+                  Momentos inolvidables de nuestras fiestas
+                </p>
+              </div>
             </div>
+            <AdminLogin
+              isAdmin={isAdmin}
+              onLogin={login}
+              onLogout={logout}
+              onOpen={openLogin}
+            />
           </div>
         </motion.div>
 
@@ -216,6 +176,17 @@ export function Galeria() {
         </motion.div>
       </div>
 
+      {/* Photo Uploader */}
+      <div className="px-6 pb-4">
+        <PhotoUploader
+          photos={photos}
+          uploading={uploading}
+          isAdmin={isAdmin}
+          onAddPhotos={addPhotos}
+          onRemovePhoto={removePhoto}
+        />
+      </div>
+
       {/* Photos Grid - Masonry Style */}
       <div className="px-6 py-4">
         {filteredPhotos.length > 0 ? (
@@ -263,7 +234,7 @@ export function Galeria() {
                     <span className="text-sm font-medium">Ver foto</span>
                   </div>
                   <p className="text-xs text-white/70 mt-1">
-                    {new Date(photo.event_date).toLocaleDateString('es-ES', {
+                    {new Date(photo.event_date || '').toLocaleDateString('es-ES', {
                       month: 'long',
                       year: 'numeric',
                     })}

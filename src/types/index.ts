@@ -13,10 +13,11 @@ export interface EventLead {
 export interface Photo {
   id?: string;
   url: string;
-  event_date: string;
+  event_date?: string;
   photographer?: string;
   featured?: boolean;
   created_at?: string;
+  pathname?: string;
 }
 
 export interface SiteConfig {

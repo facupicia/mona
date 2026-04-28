@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Heart, Calendar, Crown } from 'lucide-react';
+import { Sparkles, Heart, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface FooterProps {
-  onNavigate: (page: 'home' | 'disponibilidad' | 'galeria') => void;
+  onNavigate: (page: 'home' | 'galeria') => void;
 }
 
 export function Footer({ onNavigate }: FooterProps) {
@@ -76,7 +76,6 @@ export function Footer({ onNavigate }: FooterProps) {
             <ul className="space-y-3">
               {[
                 { label: 'Inicio', page: 'home' as const },
-                { label: 'Disponibilidad', page: 'disponibilidad' as const },
                 { label: 'Galería', page: 'galeria' as const },
               ].map((link) => (
                 <li key={link.label}>
@@ -143,7 +142,7 @@ export function Footer({ onNavigate }: FooterProps) {
             </ul>
           </motion.div>
 
-          {/* Newsletter / CTA */}
+          {/* CTA Column - Contacto */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -151,14 +150,16 @@ export function Footer({ onNavigate }: FooterProps) {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-amber-400" />
-              Reservá tu fecha
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              Contactanos
             </h4>
             <p className="text-slate-400 text-sm mb-4">
-              ¿Lista para tu gran noche? Consultá disponibilidad y asegurá tu fecha.
+              ¿Lista para tu gran noche? Escribinos y contanos todo sobre tu evento.
             </p>
-            <motion.button
-              onClick={() => onNavigate('disponibilidad')}
+            <motion.a
+              href="https://wa.me/5491112345678"
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={cn(
@@ -172,8 +173,8 @@ export function Footer({ onNavigate }: FooterProps) {
                 'transition-all duration-300'
               )}
             >
-              Consultar Disponibilidad
-            </motion.button>
+              Escribinos por WhatsApp
+            </motion.a>
           </motion.div>
         </div>
 

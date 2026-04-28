@@ -8,7 +8,7 @@ interface WhatsAppButtonProps {
 
 export function WhatsAppButton({ className }: WhatsAppButtonProps) {
   const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '';
-  const message = '¡Hola! Me interesa consultar disponibilidad para una fiesta de 15 años 🎉';
+  const message = '¡Hola! Me interesa contratarlos para una fiesta de 15 años 🎉';
   
   const handleClick = () => {
     if (!phoneNumber) {
