@@ -1,6 +1,12 @@
 import { put } from '@vercel/blob';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getBlobReadWriteToken } from './blobToken';
+
+function getBlobReadWriteToken() {
+  const token =
+    process.env.BLOB_READ_WRITE_TOKEN ?? process.env.blob_READ_WRITE_TOKEN;
+
+  return token?.trim().replace(/^['"]|['"]$/g, '');
+}
 
 export default async function handler(
   req: VercelRequest,
