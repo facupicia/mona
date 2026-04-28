@@ -112,25 +112,6 @@ export function Home({ onNavigate }: HomeProps) {
 
         {/* Content */}
         <div className="relative z-10 min-h-[100dvh] flex flex-col justify-between px-4 sm:px-6 py-6 sm:py-8">
-          {/* Top Badge */}
-          <motion.div 
-            className="pt-safe flex justify-center"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            <div className={cn(
-              'px-4 sm:px-5 py-2 sm:py-2.5 rounded-full',
-              'bg-gradient-to-r from-violet-500/20 to-purple-500/20',
-              'backdrop-blur-md border border-violet-400/30',
-              'flex items-center gap-2'
-            )}>
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="text-violet-200 text-xs sm:text-sm font-medium tracking-wide">
-                Especialistas en fiestas de 15
-              </span>
-            </div>
-          </motion.div>
 
           {/* Main Content */}
           <div className="flex-1 flex flex-col justify-center items-center text-center -mt-4 sm:-mt-8">
