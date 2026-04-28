@@ -75,19 +75,16 @@ export function Home({ onNavigate }: HomeProps) {
     <div className="min-h-screen bg-[hsl(265,50%,4%)] overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-screen w-screen left-1/2 -translate-x-1/2">
-        {/* Background Image with Overlay */}
-        <div className="absolute inset-0">
-          <img
-            src='https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1200&q=80'
-            alt='Fiesta de 15 años'
-            className="w-full h-full object-cover"
-          />
+        {/* Background with Overlay */}
+        <div className="absolute inset-0 bg-[hsl(265,50%,8%)]">
           <div className={cn(
             'absolute inset-0',
             theme.gradientHero
           )} />
           {/* Mesh gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-violet-900/20 via-transparent to-amber-500/10" />
+          {/* Radial glow */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-violet-600/10 via-transparent to-transparent" />
         </div>
 
         {/* Floating particles */}

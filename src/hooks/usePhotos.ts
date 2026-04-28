@@ -39,61 +39,10 @@ function resizeAndConvertToBase64(
   });
 }
 
-const mockPhotos: Photo[] = [
-  {
-    id: '1',
-    url: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80',
-    event_date: '2025-12-15',
-    featured: true,
-  },
-  {
-    id: '2',
-    url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800&q=80',
-    event_date: '2025-12-15',
-    featured: true,
-  },
-  {
-    id: '3',
-    url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80',
-    event_date: '2025-11-20',
-    featured: true,
-  },
-  {
-    id: '4',
-    url: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
-    event_date: '2025-11-20',
-    featured: false,
-  },
-  {
-    id: '5',
-    url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800&q=80',
-    event_date: '2025-10-08',
-    featured: false,
-  },
-  {
-    id: '6',
-    url: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=800&q=80',
-    event_date: '2025-10-08',
-    featured: true,
-  },
-  {
-    id: '7',
-    url: 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80',
-    event_date: '2025-09-12',
-    featured: false,
-  },
-  {
-    id: '8',
-    url: 'https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=800&q=80',
-    event_date: '2025-09-12',
-    featured: false,
-  },
-];
-
 type StorageMode = 'vercel' | 'local';
 
 export function usePhotos() {
-  const [photos, setPhotos] = useState<Photo[]>(mockPhotos);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [mode, setMode] = useState<StorageMode>('local');
@@ -126,12 +75,7 @@ export function usePhotos() {
             })
           );
           setPhotos((prev) => {
-            // Evitar duplicados
-            const mockIds = new Set(mockPhotos.map((m) => m.id));
-            const existingVercel = prev.filter(
-              (p) => p.pathname && !mockIds.has(p.id)
-            );
-            const existingPaths = new Set(existingVercel.map((p) => p.pathname));
+            const existingPaths = new Set(prev.map((p) => p.pathname));
             const newVercel = vercelPhotos.filter(
               (p) => !existingPaths.has(p.pathname)
             );
@@ -230,9 +174,6 @@ export function usePhotos() {
     async (id: string) => {
       const photo = photos.find((p) => p.id === id);
       if (!photo) return;
-
-      // No permitir borrar fotos mock
-      if (mockPhotos.some((m) => m.id === id)) return;
 
       if (mode === 'vercel' && photo.pathname) {
         try {
